@@ -8,14 +8,11 @@ import com.intellij.openapi.project.DumbAwareAction
 import com.intellij.openapi.wm.WindowManager
 import com.intellij.ui.JBColor
 import java.awt.Container
-import javax.swing.JComponent
-import javax.swing.JLabel
-import javax.swing.JLayeredPane
-import javax.swing.JRootPane
+import javax.swing.*
 
 class UIHop : DumbAwareAction() {
     private var highlightingActive = false
-    private val highlightedComponents = mutableSetOf<JComponent>()
+    private val highlightedComponents = HashMap<String, JComponent>()
     private var highlightPane: JLayeredPane? = null
 
     override fun actionPerformed(e: AnActionEvent) {
@@ -38,13 +35,22 @@ class UIHop : DumbAwareAction() {
 
     private fun highlightComponents(component: Container, rootPane: Container) {
         component.components.forEach {
-            if (it is JComponent && it.isVisible && it is ActionButton) {
-                val label = JLabel("Aa")
-                label.foreground = JBColor.RED
-                label.bounds = it.bounds
-
+            if (it is JComponent && it.isShowing && it is ActionButton) {
+                val combination = generateUniqueCombination()
+                val label = JLabel(" $combination ")
+                highlightedComponents[combination] = it
                 rootPane.add(label)
-                highlightedComponents.add(label)
+
+                val location = SwingUtilities.convertPoint(it.parent, it.location, rootPane)
+                label.size = label.preferredSize
+
+                label.location = location
+                label.isOpaque = true
+                label.background = JBColor.YELLOW
+                label.foreground = JBColor.WHITE
+
+                label.putClientProperty("uniqueId", it)
+                println(label.getClientProperty("uniqueId"))
             }
             if (it is Container) {
                 highlightComponents(it, rootPane)
@@ -52,10 +58,20 @@ class UIHop : DumbAwareAction() {
         }
     }
 
-    private fun removeHighlights() {
-        highlightedComponents.forEach {
-            it.parent.remove(it)
+    // Basic function to generate unique combination of 2 letters
+    // TODO: Better algorithm to generate unique combinations
+    private fun generateUniqueCombination(): String {
+        val letters = ('a'..'z')
+        // Pick 2 random letters
+        var combination: String = (1..2).map { letters.random() }.joinToString("")
+        while (combination in highlightedComponents.keys) {
+            combination = (1..2).map { letters.random() }.joinToString("")
         }
+        return combination
+    }
+
+    private fun removeHighlights() {
+        highlightPane!!.removeAll()
         highlightedComponents.clear()
     }
 
@@ -68,8 +84,8 @@ class UIHop : DumbAwareAction() {
 
     private fun createPanel(rootPane: JRootPane) {
         highlightPane = JLayeredPane()
-        highlightPane!!.bounds = rootPane.bounds
         highlightPane!!.layout = null
+        highlightPane!!.bounds = rootPane.bounds
         highlightPane!!.isVisible = true
         highlightPane!!.isOpaque = false
         rootPane.add(highlightPane)
