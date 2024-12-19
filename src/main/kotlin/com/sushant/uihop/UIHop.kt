@@ -1,4 +1,4 @@
-package com.sushant.intellijsense.uihop
+package com.sushant.uihop
 
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent

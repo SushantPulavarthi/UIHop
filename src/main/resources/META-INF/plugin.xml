@@ -30,7 +30,7 @@
     <actions>
         <action
                 id="UIHop"
-                class="com.sushant.intellijsense.uihop.UIHop"
+                class="com.sushant.uihop.UIHop"
                 text="UIHop"
                 description="Highlights UI Elements.">
             <keyboard-shortcut keymap="$default" first-keystroke="shift G"/>
