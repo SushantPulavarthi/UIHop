@@ -14,7 +14,11 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Highlights and labels different parts of the UI.
+<div>
+  <p><strong>Highlights and labels different parts of the UI.</strong></p>
+  <p>Simply toggle the <code>UIHop</code> action to active or remove the highlights.</p>
+  <p><strong>Default keybind:</strong> <code>Shift + G</code></p>
+</div>
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.

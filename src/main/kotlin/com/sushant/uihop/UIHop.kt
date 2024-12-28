@@ -48,9 +48,6 @@ class UIHop : DumbAwareAction() {
                 label.isOpaque = true
                 label.background = JBColor.YELLOW
                 label.foreground = JBColor.WHITE
-
-                label.putClientProperty("uniqueId", it)
-                println(label.getClientProperty("uniqueId"))
             }
             if (it is Container) {
                 highlightComponents(it, rootPane)
